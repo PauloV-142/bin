@@ -1,0 +1,19 @@
+#!/bin/zsh
+
+# cd to the Programacao directory.
+PROGRAMAR_FOLDER="$HOME/Documentos/Programacao"
+
+# -l for list
+
+if [ "$1" = "-l" ]; then
+	ls $PROGRAMAR_FOLDER
+	return
+fi
+
+# $1 is any subfolder under $PROGRAMAR_FOLDER
+if [ -n $1 ]; then
+	cd "${PROGRAMAR_FOLDER}/${1}"
+else
+	echo "Tip: $ programar PHP"
+	cd "${PROGRAMAR_FOLDER}"
+fi

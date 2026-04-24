@@ -1,0 +1,54 @@
+#!/bin/bash
+percentage() {
+    echo $(((100 * $1) / $MAX))
+}
+
+gotoBacklightFolder() {
+    BACKLIGHT_FOLDER='/sys/class/backlight/'
+    cd $BACKLIGHT_FOLDER
+    cd $(ls)
+}
+
+updateBacklight() {
+    getBacklightValue() {
+        if [ -z $1 ] ; then
+            echo 150
+        else
+            echo $1
+        fi
+    }
+
+    gotoBacklightFolder
+
+    MAX=$(cat max_brightness)
+    echo "The system allows between 0 - $MAX"
+
+    NUM=$(getBacklightValue $1)
+    echo "Setting backlight to $NUM"
+    echo "Equal to $(percentage $NUM)%"
+
+    sudo echo $NUM > brightness
+}
+
+changeDefaultBacklightValue() {
+    cd $HOME/bin
+    echo $(getBacklightValue $1) > backlight.txt
+}
+
+if [ "$1" = "-d" ]; then
+    changeDefaultBacklightValue $2
+    updateBacklight $2
+else
+	updateBacklight $1
+    cd $HOME/bin
+    cat backlight.txt
+fi
+
+
+
+
+
+# Let the user redefine the default value.
+# There is a set of rules for the stored default value.
+
+

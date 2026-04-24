@@ -1,0 +1,55 @@
+#!/bin/zsh
+
+# Future ideas:
+# 1. Get current shell and make aliases only for it [what?]
+# [x] 2. Update ~./zshrc automatically [DONE (with an alias)]
+# 3. Open with default zsh text editor (in Oh My Zsh config)
+# 4. Check if bat or cat should be used.
+edit_alias_file() {
+	nano $ZSH/custom/aliases.zsh
+}
+
+print_aliases() {
+	bat -p $ZSH/custom/aliases.zsh
+}
+
+show_help() {
+	echo "Gut's utils: NEWALIAS\n"
+	bat -p $HOME/bin/assets/newalias.help.zsh
+
+	# echo "USAGE:"
+	# echo "$ newalias shortcut 'command' ([Create a new alias and stores it.])"
+	# echo "$ newalias [-o|--open] ([Open the alias file with nano])"
+	# echo "$ newalias [|-h|--help] ([Print this help.])"
+	# echo "$ newalias [-p|--print] ([Print your custom aliases])"
+}
+
+reload_shell() {
+	source ~/.zshrc
+	echo "Shell reloaded."
+}
+
+create_new_alias() {
+	# $1 -> String to be aliased.
+	# $2 -> Command to execute.
+	echo "alias "${1}"='${2}'" >> $ZSH/custom/aliases.zsh
+	echo "Alias created: "${1}"='${2}'"
+	echo "Run $ source ~/.zshrc"
+	# source ~/.zshrc # Run 'newalias' with $ source
+}
+
+
+if [ "$1" = "-o" -o "$1" = "--open" -o "$1" = "-e" -o "$1" = "--edit" ]; then # Open with nano
+	edit_alias_file
+	reload_shell
+
+elif [ "$1" = "-p" -o "$1" = "--print" ]; then # Print aliases
+	print_aliases
+
+elif [ -z "$1" -o "$1" = "-h" -o "$1" = "--help" ]; then # Show help
+	show_help
+
+else
+	create_new_alias $1 $2
+	reload_shell
+fi

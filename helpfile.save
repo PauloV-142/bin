@@ -1,0 +1,10 @@
+#!/bin/zsh
+
+
+if [ -z "$1" -o "$1"="-h" -o "$1"="--help" ]; then
+	bat -p .help.zsh
+else
+	# Helpfile, edit user commands help strings (located inside $HOME/bin/assets)
+	# $1 -> Command to edit the helpfile of
+	nano "$HOME/bin/assets/${1}.help.zsh"
+fi

@@ -1,0 +1,75 @@
+#!/bin/zsh
+
+
+# $1 = 1 INICIAR
+# $1 = 0 DESLIGAR
+if [ -z "$1" ]; then
+    echo "Usage:"
+    echo "$ togglephp [1-0]"
+    echo "INICIAR [1] ou DESLIGAR [0]"
+    return 1
+fi
+
+
+if [ $1 = 1 ]; then
+    echo "Iniciando..."
+    echo
+    echo "Ativando apache (httpd)"
+    sudo systemctl enable --now httpd
+    sudo systemctl status httpd | grep -E 'Active|Started'
+    echo
+
+    echo "Ativando MariaDB."
+    sudo systemctl enable --now mariadb
+    sudo systemctl status mariadb | grep -E 'Active|Started'
+    echo
+
+    echo "Ativando php-fpm."
+    sudo systemctl enable --now php-fpm
+    sudo systemctl status php-fpm | grep -E 'Active|Started'
+
+#     echo "Agora mudando o contexto do SELinux para $DOCUMENT_ROOT"
+#     sudo chcon -Rt httpd_sys_content_t $DOCUMENT_ROOT
+	
+    printf "\nTudo pronto!"
+    printf "Everything is active.\n"
+
+elif [ $1 = 0 ]; then
+    echo "Desligando..."
+
+    echo "Desativando apache (httpd)"
+    sudo systemctl disable --now httpd
+    sudo systemctl status httpd | grep -n "Stopped" || echo "Já está desativado."
+    echo
+
+    echo "Desativando MariaDB."
+    sudo systemctl disable --now mariadb
+    sudo systemctl status mariadb | grep -n "Stopped" || echo "Já está desativado."
+    echo
+
+    echo "Desativando php-fpm."
+    sudo systemctl disable --now php-fpm
+    sudo systemctl status php-fpm | grep -n "Stopped" || echo "Já está desativado."
+    echo
+
+    echo "Tudo foi desativado."
+
+#     echo "Retornando o contexto do SELinux para $DOCUMENT_ROOT"
+#     sudo restorecon -Rv $DOCUMENT_ROOT
+fi
+echo "Bye"
+####################################
+
+
+
+# Ajustar o firewall para fora do localhost
+
+#sudo firewall-cmd --add-service=http --permanent
+#sudo firewall-cmd --add-service=https --permanent
+#sudo firewall-cmd --reload
+
+#    --add-service=http: Adiciona uma regra para permitir o tráfego na porta 80 (HTTP).
+#    --add-service=https: Adiciona uma regra para permitir o tráfego na porta 443 (HTTPS), se você for usá-lo no futuro.
+#    --permanent: Salva a regra para que persista após a reinicialização do sistema.
+#    --reload: Aplica as novas regras imediatamente.
+#    Por que?: Para que você possa acessar o servidor web de outras máquinas na sua rede, se necessário. Para o desenvolvimento local, pode não ser essencial, mas é uma boa prática.

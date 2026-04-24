@@ -1,0 +1,15 @@
+#!/bin/bash
+ICON="🦊"
+
+while getopts ":a" option; do
+	case $option in 
+		a) # ajuda
+			echo "Eu Te ajudo. $ICON"
+			exit;;
+	  	\?) # invalid option
+			echo "Erro, opção inválida. $ICON"
+			exit;;
+	esac
+done
+
+echo "Digite a sua opção"

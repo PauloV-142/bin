@@ -1,0 +1,16 @@
+#!/bin/zsh
+
+# $1 - Drive to backup from
+if [ -z "$1" ]; then
+# If empty
+	rsync -avz --progress "/run/media/$(whoami)/Paulo_3i3" "$HOME/Backups/"
+	return
+elif [ "$1" = "-h" ]; then
+	echo "Backup - Gut's Utils"
+	echo "- A wrapper around rsync."
+
+	bat -p $HOME/bin/assets/backup.help.zsh
+	return
+fi
+
+rsync -avz --progress "/run/media/$(whoami)/$1" "$HOME/Backups/"

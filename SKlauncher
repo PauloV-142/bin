@@ -1,0 +1,7 @@
+#!/bin/zsh
+
+cd "$HOME/Software"
+
+# $1 -> path/to/sklauncher
+
+java -jar SKlauncher-3.2.18.jar

@@ -1,0 +1,48 @@
+#!/bin/bash
+
+echo "CONFIGURATION HELPER FOR (x.org's) 'xinput'"
+echo "Based on www.linux.org/threads/cool-tricks-with-xinput-device.10345"
+echo
+
+echo "Options: 0: Create master device 1: reattach external keyboard and mice; 2: Lock mouse on a specific window."
+read -p ": " OPTION
+
+if [ "$OPTION" = "0" ]; then
+    read -p "What is the new master device name? (type 'monitor') : " MASTER_NAME
+    xinput create-master $MASTER_NAME
+    echo "All set (errors will be printed)."
+    echo "Re-run this file with option 1 to config the extra devices (after plugging them)."
+
+elif [ "$OPTION" = "1" ]; then
+    echo "Reattaching external devices to their master."
+    xinput | grep master
+
+    read -p "Which master device you want to set as TARGET? : " MASTER_NAME
+    echo "Mster device nme stored. ($MASTER_NAME)"
+    echo "Reattaching to 'SEMICO USB Keyboard'"
+    xinput reattach 'SEMICO USB Keyboard' "$MASTER_NAME keyboard"
+    xinput reattach 'SEMICO USB Keyboard System Control' "$MASTER_NAME keyboard"
+    xinput reattach 'keyboard:SEMICO USB Keyboard Consumer Control' "$MASTER_NAME keyboard"
+
+    # LOOK for actual mouse id.
+    read -p "The mouses probably have equal names, look for the right one... [Enter]"
+    xinput | grep -i mouse
+    read -p "Type the id of the mouse you want (tip: the mouse with a greater id is the last one you plugged.) :" CORRECT_MOUSE_ID
+    echo "Mouse id stored. ($CORRECT_MOUSE_ID)"
+    xinput reattach "$CORRECT_MOUSE_ID" "$MASTER_NAME pointer"
+    xinput reattach 'pointer:SEMICO USB Keyboard Consumer Control' "$MASTER_NAME pointer"
+    echo "All set (errors will be printed)."
+    echo "Re-run this file with option 1 to lock a device into a specific window (for fullscren games)."
+
+elif [ "$OPTION" = "2" ]; then
+    echo "Click on the window you want with the ORIGINAL cursor."
+    xwininfo | grep "Window id:"
+    read -p "Type the window id with the cursor (no regex yet.) : " WINDOW_ID
+    echo "Window id stored. ($WINDOW_ID)"
+    read -p "Press enter to view master devices..."
+    xinput | grep master
+    read -p "Which master POINTER device you want to lock? (type id) : " DEVICE_ID
+    echo "Device id stored. ($DEVICE_ID)"
+    xinput set-cp $WINDOW_ID $DEVICE_ID
+    echo "All set (errors will be printed)."
+fi

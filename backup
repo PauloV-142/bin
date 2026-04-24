@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# $1 - Drive to backup from
+if [ -z "$1" ]; then
+# If empty
+	unison "/run/media/$(whoami)/Paulo_3i3" "$HOME/Backups/Paulo_3i3"
+	exit
+elif [ "$1" = "-h" ]; then
+	echo "Backup - Gut's Utils"
+	echo "- A wrapper around UNISON."
+
+	bat -p $HOME/bin/assets/backup.help.zsh
+	exit
+fi
+
+unison "/run/media/$(whoami)/$1" "$HOME/Backups/$1"

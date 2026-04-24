@@ -1,0 +1,29 @@
+#!/bin/bash
+
+# Compile C file with ggc
+# Including cs50 library!
+
+if [ "$1" = "--help" -o -z "$1" ]; then
+    echo "--Compile50 Help--"
+    echo
+    echo "compile50 is an absurdly simple wrapper for GCC."
+    echo "It helps compiling c language files."
+    echo "Will always include the CS50 library (if avaliable)."
+    echo
+    echo "Usage:"
+    echo
+    echo "$ compile50 binary_file source_file"
+    echo
+    echo "Options:"
+    echo
+    echo "    --help - Show this help"
+    echo "    --fix - add /usr/local/lib to the session's PATH"
+    echo "            The cs50.h lib should be in that directory."
+	echo
+	echo "What it does:"
+	echo "gcc -lcs50 -o {binary_file_name} {source_file_name}"
+	echo "chmod +x {source_file_name}"
+else
+    gcc -lcs50 -o $1 $2
+    chmod +x $1
+fi

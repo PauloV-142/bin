@@ -1,0 +1,63 @@
+#!/bin/zsh
+
+# $1 = 1 INICIAR
+# $1 = 0 DESLIGAR
+if [ -z "$1" ]; then
+    echo "Usage:"
+    echo "$ togglephp [1-0]"
+    echo "INICIAR [1] ou DESLIGAR [0]"
+    return 1
+fi
+
+if [ $1 -eq 1 ]; then
+	echo "Ligando..."
+	echo "Iniciando Apache."
+	sudo systemctl start httpd.service
+	sudo systemctl status httpd | grep -E 'Active|Started'
+	echo
+
+	echo "Iniciando MariaDB."
+	sudo systemctl start mariadb.service
+	sudo systemctl status mariadb | grep -E 'Active|Started'
+	echo
+	
+	echo "Use esse comando para permitir que o PHP leia os arquivos do /var/www/seu/projeto"
+	echo "/sbin/restorecon -vR /var/www/seu/projeto"
+
+	echo "Status php-fpm"
+	sudo systemctl status php-fpm | grep -E 'Active|Started'
+	
+	echo "Giving php-fpm access to /var/www/html"
+	/sbin/restorecon -r /var/www/html/
+	/sbin/restorecon -r /home/gut/Documentos/Programacao/PHP/
+
+	printf "\nFinalizado\n"
+
+	echo "TIP: run 'sudo tail -f /var/log/httpd/error_log' so see RTos logging."
+	# Change selinux rules for allow apache run without problems
+	## sudo chcon -R -t httpd_sys_rw_content_t /var/www
+	## sudo setsebool -P httpd_can_network_connect 1
+	## sudo setsebool -P httpd_can_network_connect_db 1
+
+	# Restart Apache service to apply changes
+	## sudo systemctl restart httpd.service
+
+elif [ $1 -eq 0 ]; then
+	echo "Desligando..."
+	echo "Desativando apache (httpd)"
+    sudo systemctl disable --now httpd
+    sudo systemctl status httpd | grep -n "Stopped" || echo "Já está desativado."
+    echo
+
+    echo "Desativando MariaDB."
+    sudo systemctl disable --now mariadb
+    sudo systemctl status mariadb | grep -n "Stopped" || echo "Já está desativado."
+    echo
+
+    echo "Desativando php-fpm."
+    sudo systemctl disable --now php-fpm
+    sudo systemctl status php-fpm | grep -n "Stopped" || echo "Já está desativado."
+    echo
+
+    echo "Tudo foi desativado."
+fi

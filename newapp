@@ -1,0 +1,29 @@
+#!/bin/zsh
+
+# $1 Application name, info and size.
+
+#testforinput() {
+# $1 Input
+# $2 Question to ask if input is not there.
+
+#if [ -z "$1" ]; then
+#	read -p "$2" RESULT
+#	echo $RESULT
+#else
+#	echo $1
+#fi
+#}
+
+# TEXT=$(testforinput $1 "Type the app info: ")
+#echo $1 >> $HOME/Downloads/User-installed-apps.txt
+
+LOCATION="$HOME/Downloads/User-installed-apps.txt"
+
+# $1 => app info
+if [ -n "$1" ]; then
+	echo $1 >> $LOCATION
+	tail $LOCATION
+	return
+else
+	kate $LOCATION
+fi
