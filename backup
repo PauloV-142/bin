@@ -1,9 +1,19 @@
 #!/bin/bash
 
+notify_finished(){
+	notify "Backup Finished."
+}
+
+make_backup(){
+ # $1 - Source folder.
+ unison -auto "/run/media/$(whoami)/$1" "$HOME/Backups/$1"
+}
+
 # $1 - Drive to backup from
 if [ -z "$1" ]; then
 # If empty
-	unison "/run/media/$(whoami)/Paulo_3i3" "$HOME/Backups/Paulo_3i3"
+	make_backup "Paulo_3i3"
+	notify_finished
 	exit
 elif [ "$1" = "-h" ]; then
 	echo "Backup - Gut's Utils"
@@ -13,4 +23,5 @@ elif [ "$1" = "-h" ]; then
 	exit
 fi
 
-unison "/run/media/$(whoami)/$1" "$HOME/Backups/$1"
+make_backup
+notify_finished

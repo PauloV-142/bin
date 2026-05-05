@@ -1,0 +1,16 @@
+#!/bin/bash
+
+
+
+# while sleep 2; do notify bruh; done
+
+while getopts ":a" option; do
+	case $option in
+	n)
+		NOTIFICATION=1
+		echo "Notifications enabled."
+		
+	esac
+done
+
+echo $0 $1 $2 $3
