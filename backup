@@ -1,27 +1,44 @@
 #!/bin/bash
 
-notify_finished(){
-	notify "Backup Finished."
-}
-
 make_backup(){
  # $1 - Source folder.
- unison -auto "/run/media/$(whoami)/$1" "$HOME/Backups/$1"
+ rsync -avz --progress --delete "/run/media/$(whoami)/$1" "$HOME/Backups/"
 }
+
+TITLE=$(cat << DELIMITER
+Backup - Gut's Utils
+- A wrapper around Rsync.
+DELIMITER
+)
+
+HELP=$(cat << DELIMITER
+USAGE:
+$ backup [SOURCE_DRIVE_LABEL]
+
+INFO:
+This is a driver backup ultility, refer to a drive through it's label.
+Source location is: /run/media/$USER/[SOURCE_DRIVE_LABEL]
+
+The backup is stored under /home/$USER/Backups/
+
+# Ideas for the future
+Let the user define it's default backuped drives, to backup all them when the user just types $ backup
+
+$ backup -m [--mount], mount the device before starting the backup (if found)
+$ backup -u [--unmount], unmount the drive after the backup is done
+DELIMITER
+)
 
 # $1 - Drive to backup from
 if [ -z "$1" ]; then
 # If empty
 	make_backup "Paulo_3i3"
-	notify_finished
+	notify "Backup Finished."
 	exit
 elif [ "$1" = "-h" ]; then
-	echo "Backup - Gut's Utils"
-	echo "- A wrapper around UNISON."
-
-	bat -p $HOME/bin/assets/backup.help.zsh
+	echo -e $TITLE $HELP
 	exit
 fi
 
-make_backup
-notify_finished
+make_backup $1
+notify "Backup Finished."
