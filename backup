@@ -1,10 +1,5 @@
 #!/bin/bash
 
-make_backup(){
- # $1 - Source folder.
- rsync -avz --progress --delete "/run/media/$(whoami)/$1" "$HOME/Backups/"
-}
-
 TITLE=$(cat << DELIMITER
 Backup - Gut's Utils
 - A wrapper around Rsync.
@@ -29,16 +24,37 @@ $ backup -u [--unmount], unmount the drive after the backup is done
 DELIMITER
 )
 
+MEDIA_PATH="/run/media/$USER"
+BACKUP_PATH="$HOME/Backups/"
+
+notify-finished(){
+	notify-send "Finished Backup of $1."
+}
+
+make_backup(){
+ # $1 - Source folder.
+ notify-send -t 1500 "Starting Backup."
+ rsync -avz --progress --delete $1 "$BACKUP_PATH"
+ notify-finished $1
+}
+
 # $1 - Drive to backup from
 if [ -z "$1" ]; then
 # If empty
-	make_backup "Paulo_3i3"
-	notify "Backup Finished."
+	make_backup "$MEDIA_PATH/Paulo_3i3"
 	exit
+
+elif [ "$1" = "-p" -o "$1" = "--full-path" ]; then
+	# $1 -> Option
+    # $2 -> Drive Path
+	# USEFUL for backup automation.
+	make_backup $2
+	sleep 1
+	exit
+
 elif [ "$1" = "-h" ]; then
 	echo -e $TITLE $HELP
 	exit
 fi
 
-make_backup $1
-notify "Backup Finished."
+make_backup "$MEDIA_PATH/$1"
