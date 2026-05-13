@@ -29,4 +29,5 @@ elif [ "$1" = "-h" -o "$1" = "--help" ]; then
 else
 	# $1 -> file under ~/bin to be opened
 	nano $HOME/bin/$1
+	echo "Don't Forget to Commit Your Changes!!!"
 fi

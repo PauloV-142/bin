@@ -27,15 +27,11 @@ DELIMITER
 MEDIA_PATH="/run/media/$USER"
 BACKUP_PATH="$HOME/Backups/"
 
-notify-finished(){
-	notify-send "Finished Backup of $1."
-}
-
 make_backup(){
  # $1 - Source folder.
- notify-send -t 1500 "Starting Backup."
+ notify-send "Starting Backup."
  rsync -avz --progress --delete $1 "$BACKUP_PATH"
- notify-finished $1
+ notify-send "Finished Backup of ${1}"
 }
 
 # $1 - Drive to backup from
