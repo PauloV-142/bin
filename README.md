@@ -9,8 +9,8 @@ Reason: To run `source ~/.zshrc` **automatically** everytime something changes.
 
 ---
 ### `backup`
-Create & Update a backup of my pendrives everyday using [unison](https://github.com/bcpierce00/unison)  
-Note: My paths are **hardcoded**. I'll add configs to change it later. (Open an issue about it).  
+Create & Update a backup of my pendrives everyday using [rsync]([https://github.com/bcpierce00/unison](https://github.com/RsyncProject/rsync))  
+Note: My paths are **hardcoded** (specially of my pendrive). I'll add configs to change it later. (Open an issue about it).
 
 ---
 ### cd_ls [FORGET]
@@ -36,8 +36,8 @@ Uses `bat` for pretty printing
 ### `luz`
 Changes the (laptop) screen brightness.  
 Navigates to `/sys/class/backlight/$backlight_folder/` and edits the `brightness` value according to your input.  
-Note: Requires sudo to edit that file.  
-(My first shellscript)  
+Note: Requires root account to edit that file.  
+(My first shellscript :D)  
 
 ---
 ### `newapp`
