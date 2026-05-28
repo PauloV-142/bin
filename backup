@@ -16,11 +16,14 @@ Source location is: /run/media/$USER/[SOURCE_DRIVE_LABEL]
 
 The backup is stored under /home/$USER/Backups/
 
-# Ideas for the future
-Let the user define it's default backuped drives, to backup all them when the user just types $ backup
+OPTIONS:
+ -p --full-path -specify the full path of the source device (Useful if this command is executed from another e.g. automation)
 
-$ backup -m [--mount], mount the device before starting the backup (if found)
-$ backup -u [--unmount], unmount the drive after the backup is done
+# Ideas for the future
+Let the user define it's default backuped drives, to backup all them when the user executes this command
+
+$ backup -m --mount, mount the device before starting the backup (if found)
+$ backup -u --unmount, unmount the drive after the backup is done
 DELIMITER
 )
 

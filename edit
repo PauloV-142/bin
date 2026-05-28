@@ -1,33 +1,52 @@
 #!/bin/zsh
 
+###############
+## Functions ##
+###############
+
 list_bin() {
 	ls --color=auto $HOME/bin
 }
 
-echo 'TODO: Fix this command --options'
+print_help() {
+	echo "Edit - Gut's Utils"
+	echo "Manage your personal scripts."
+	echo
+	echo "Options:"
+	echo
+	echo "-h > Display help"
+	echo "-p > List your scripts"
+	echo "[ \$SCRIPT_NAME ] > edit or creat a script"
+	echo "[ nothing ] > 'cd' into /bin"
+}
 
-# if $1 -> Empty
-test -z "$1" && cd $HOME/bin && return 1
-
-# $1 -> file under ~/bin to be opened
-nano $HOME/bin/$1
-chmod +x $HOME/bin/$1
-return 0
-
-if [ -z "$1" ]; then
-	$HOME/bin
-
-if [ "$1" = "-p" -o "$1" = "--print" ]; then
-	ls --color=auto $HOME/bin
-
-elif [ "$1" = "-h" -o "$1" = "--help" ]; then
-	echo "Helpfile - Gut's Utils"
-	echo "Manage pretty help docs for your commands."
-
-	#bat -p $HOME/bin/assets/edit.help.txt
-	# Call the helpfile command here :D : $ helpfile -p [--print] edit
-else
-	# $1 -> file under ~/bin to be opened
+open_or_create_script() {
 	nano $HOME/bin/$1
-	echo "Don't Forget to Commit Your Changes!!!"
+	chmod +x $HOME/bin/$1
+}
+
+####################
+## Handle Options ##
+####################
+
+while getopts ":hp" option; do
+	case $option in
+		h)
+			print_help
+			exit;;
+		p)
+			list_bin
+			exit;;
+		\?)
+			echo "Invalid option, use -h for info."
+			exit;;
+	esac
+done
+
+## In case of no option;
+
+if [ -z '$1' ]; then
+	cd $HOME/bin
+else
+	open_or_create_script $1
 fi

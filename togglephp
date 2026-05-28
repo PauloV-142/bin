@@ -11,6 +11,9 @@ fi
 
 if [ $1 -eq 1 ]; then
 	echo "Ligando..."
+	echo
+	echo "Logs:"
+	echo "---------------------------------------------------"
 	echo "Iniciando Apache."
 	sudo systemctl start httpd.service
 	sudo systemctl status httpd | grep -E 'Active|Started'
@@ -30,6 +33,7 @@ if [ $1 -eq 1 ]; then
 	echo "Giving php-fpm access to /var/www/html"
 	/sbin/restorecon -r /var/www/html/
 	/sbin/restorecon -r /home/gut/Documentos/Programacao/PHP/
+	echo "---------------------------------------------------"
 
 	printf "\nFinalizado\n"
 
@@ -41,6 +45,13 @@ if [ $1 -eq 1 ]; then
 
 	# Restart Apache service to apply changes
 	## sudo systemctl restart httpd.service
+	echo
+	echo "You have the following projects:"
+	echo "projetoClassioPW"
+	echo "computadorCss2"
+	echo "PHPFiles"
+	echo
+	echo "Access http://localhost/{projetct_name} to access them." 
 
 elif [ $1 -eq 0 ]; then
 	echo "Desligando..."
