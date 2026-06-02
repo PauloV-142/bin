@@ -27,21 +27,27 @@ print_help() {
 }
 
 open_or_create_script() {
-	FILE_EXISTS=$(test -e $1 && echo 1)
-	if [ -z $FILE_EXISTS ]; then
-		touch $1
-		echo '#!/bin/bash' >> $1
-	fi
+
+	# Auto shebang
+	## Not useful because I couldn't delete an empty file properly...
+	
+	#FILE_EXISTS=$(test -e $1 && echo 1)
+	#if [ -z $FILE_EXISTS ]; then
+	#	touch $1
+	#	echo '#!/bin/bash' >> $1
+	#fi
 
 	$TEXT_EDITOR $HOME/bin/$1
 
 	chmod +x $HOME/bin/$1
 
 	# A non modified file gets deteled
-	EMPTY=$(test "$(cat $1)" = "#!/bin/bash" && echo 1)
-	if [ $EMPTY ]; then
-		command rm $HOME/bin/$1
-	fi
+	## ..Not a good idea actually, I accidentally deleted a useful script.
+
+	# EMPTY=$(test "$(cat $1)" = "#!/bin/bash" && echo 1)
+	# if [ $EMPTY ]; then
+	#	command rm $HOME/bin/$1
+	# fi
 }
 
 # The user must commit every changes, this helps him do it.
@@ -55,7 +61,6 @@ show_git_status(){
 
 open_folder(){
 	cd $HOME/bin
-	show_git_status
 }
 
 ####################
@@ -80,7 +85,6 @@ done
 
 if [ -z "$1" ]; then
 	open_folder
-	cd $HOME/bin
 else
 	open_or_create_script $1
 fi
