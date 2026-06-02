@@ -1,6 +1,12 @@
 #!/bin/zsh
 
 ###############
+## Variables ##
+###############
+
+TEXT_EDITOR='kate'
+
+###############
 ## Functions ##
 ###############
 
@@ -21,8 +27,17 @@ print_help() {
 }
 
 open_or_create_script() {
-	nano $HOME/bin/$1
+	$TEXT_EDITOR $HOME/bin/$1
 	chmod +x $HOME/bin/$1
+}
+
+open_folder(){
+	cd $HOME/bin
+	GIT_STATUS=$(git status --short)
+	if [ -n "$GIT_STATUS" ]; then
+		echo "There are unsaved changes!"
+		git status --short
+	fi
 }
 
 ####################
@@ -45,7 +60,8 @@ done
 
 ## In case of no option;
 
-if [ -z '$1' ]; then
+if [ -n '$1' ]; then
+	open_folder
 	cd $HOME/bin
 else
 	open_or_create_script $1
