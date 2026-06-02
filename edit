@@ -4,7 +4,7 @@
 ## Variables ##
 ###############
 
-TEXT_EDITOR='kate'
+TEXT_EDITOR='nano'
 
 ###############
 ## Functions ##
@@ -27,17 +27,35 @@ print_help() {
 }
 
 open_or_create_script() {
+	FILE_EXISTS=$(test -e $1 && echo 1)
+	if [ -z $FILE_EXISTS ]; then
+		touch $1
+		echo '#!/bin/bash' >> $1
+	fi
+
 	$TEXT_EDITOR $HOME/bin/$1
+
 	chmod +x $HOME/bin/$1
+
+	# A non modified file gets deteled
+	EMPTY=$(test "$(cat $1)" = "#!/bin/bash" && echo 1)
+	if [ $EMPTY ]; then
+		command rm $HOME/bin/$1
+	fi
+}
+
+# The user must commit every changes, this helps him do it.
+show_git_status(){
+	GIT_STATUS=$(git status --short)
+	if [ "$GIT_STATUS" ]; then
+		echo "There are changes to commit!"
+		git status --short
+	fi
 }
 
 open_folder(){
 	cd $HOME/bin
-	GIT_STATUS=$(git status --short)
-	if [ -n "$GIT_STATUS" ]; then
-		echo "There are unsaved changes!"
-		git status --short
-	fi
+	show_git_status
 }
 
 ####################
@@ -60,9 +78,11 @@ done
 
 ## In case of no option;
 
-if [ -n '$1' ]; then
+if [ -z "$1" ]; then
 	open_folder
 	cd $HOME/bin
 else
 	open_or_create_script $1
 fi
+
+show_git_status
