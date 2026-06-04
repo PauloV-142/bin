@@ -27,11 +27,16 @@ $ backup -u --unmount, unmount the drive after the backup is done
 DELIMITER
 )
 
+echo_modified_files(){
+	notify-send $(rsync --dry-run -avz /run/media/gut/Paulo_3i3 /home/gut/Backups/ | grep Paulo_3i3)
+}
+
 MEDIA_PATH="/run/media/$USER"
 BACKUP_PATH="$HOME/Backups/"
 
 make_backup(){
  # $1 - Source folder.
+ echo_modified_files
  notify-send "Starting Backup."
  rsync -avz --progress --delete $1 "$BACKUP_PATH"
  notify-send "Finished Backup of ${1}"

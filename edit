@@ -52,6 +52,7 @@ open_or_create_script() {
 
 # The user must commit every changes, this helps him do it.
 show_git_status(){
+	cd $HOME/bin
 	GIT_STATUS=$(git status --short)
 	if [ "$GIT_STATUS" ]; then
 		echo "There are changes to commit!"
