@@ -1,0 +1,28 @@
+#!/bin/bash
+
+# Dependencies:
+## git
+## notify-send
+
+# How to use
+## Set the path of your local repository and name on VARIABLES section.
+## I suggest you add some sort of sortcut or timer to run this script.
+## For example, In KDE you can easly configure the command to be always executed everytime I mount the pendrive.
+
+###############
+## Variables ##
+###############
+
+REPO_PATH="/run/media/gut/Paulo_3i3/Programacao/react/CantinaTCC/"
+REPO_NAME="CantinaTCC"
+
+##########
+## Main ##
+##########
+
+notify-send "Starting Pull of $REPO_NAME."
+
+cd $REPO_PATH
+git pull
+
+notify-send "Finished Pull of $REPO_NAME."
