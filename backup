@@ -61,4 +61,5 @@ elif [ "$1" = "-h" ]; then
 	exit
 fi
 
+notify-send "Initializing backup Application."
 make_backup "$MEDIA_PATH/$1"
