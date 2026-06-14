@@ -28,7 +28,8 @@ DELIMITER
 )
 
 echo_modified_files(){
-	notify-send $(rsync --dry-run -avz /run/media/gut/Paulo_3i3 /home/gut/Backups/ | grep Paulo_3i3)
+	CHANGED_FILES=$(rsync --dry-run -avz /run/media/gut/Paulo_3i3 /home/gut/Backups/ | grep Paulo_3i3)
+	printf "Here's What Changed:\n $CHANGED_FILES"
 }
 
 MEDIA_PATH="/run/media/$USER"
