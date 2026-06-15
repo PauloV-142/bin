@@ -1,12 +1,13 @@
 #!/bin/bash
 
-TITLE=$(cat << DELIMITER
-Backup - Gut's Utils
-- A wrapper around Rsync.
-DELIMITER
-)
+###############
+## Variables ##
+###############
 
 HELP=$(cat << DELIMITER
+Backup - Gut's Utils
+- A wrapper around Rsync.
+
 USAGE:
 $ backup [SOURCE_DRIVE_LABEL]
 
@@ -27,40 +28,115 @@ $ backup -u --unmount, unmount the drive after the backup is done
 DELIMITER
 )
 
-echo_modified_files(){
-	CHANGED_FILES=$(rsync --dry-run -avz /run/media/gut/Paulo_3i3 /home/gut/Backups/ | grep Paulo_3i3)
-	printf "Here's What Changed:\n $CHANGED_FILES"
-}
-
 MEDIA_PATH="/run/media/$USER"
 BACKUP_PATH="$HOME/Backups/"
 
-make_backup(){
- # $1 - Source folder.
- echo_modified_files
- notify-send "Starting Backup."
- rsync -avz --progress --delete $1 "$BACKUP_PATH"
- notify-send "Finished Backup of ${1}"
+###############
+## Functions ##
+###############
+
+ask_for_permission() {
+ # $1 - Source Drive/Folder path.
+ ANSWER=$(
+   notify-send --wait -t 100000 --action="No" --action="Yes" --app-name="Backup" "Start backup now?"
+  )
+
+  case $ANSWER in
+	0)
+	 notify-send --app-name="Backup" "Cancelled."
+	 exit;;
+
+	1)
+	 #notify-send --app-name="Backup" "Starting soon."
+	 ;;
+  esac
 }
 
-# $1 - Drive to backup from
-if [ -z "$1" ]; then
-# If empty
-	make_backup "$MEDIA_PATH/Paulo_3i3"
-	exit
+ notification="notify-send --app-name=Backup"
 
-elif [ "$1" = "-p" -o "$1" = "--full-path" ]; then
-	# $1 -> Option
-    # $2 -> Drive Path
-	# USEFUL for backup automation.
-	make_backup $2
-	sleep 1
-	exit
+make_backup(){
+ # $1 - Source Drive/Folder path.
 
-elif [ "$1" = "-h" ]; then
-	echo -e $TITLE $HELP
-	exit
+ print_modified_files
+
+ $notification "Starting Backup."
+
+ rsync --dry-run -avz --progress --delete $1 "$BACKUP_PATH"
+
+ $notification "Finished Backup."
+}
+
+print_modified_files(){
+	CHANGED_FILES=$(
+	 rsync --dry-run -avz $1 /home/gut/Backups/
+	)
+
+	notify-send "Here's What Changed: $CHANGED_FILES"
+}
+
+count_modified_files(){
+ # $1 - Source Folder
+ NUMBER_OF_MODIFIED_FILES=$(
+  rsync --dry-run -avz $1 /home/gut/Backups/ | grep -c $1
+ )
+
+ notify-send --app-name="Backup" "Files modified: $($NUMBER_OF_MODIFIED_FILES)"
+
+}
+
+####################
+## Handle Options ##
+####################
+
+while getopts "hp: a" option; do
+	case $option in
+		h) # --help
+			echo -e $HELP
+			exit;;
+		p) # --full-path
+			USE_FULL_PATH=1
+			FULL_PATH=$OPTARG
+			;;
+		a) # --ask-for-permission
+			ASK_FOR_PERMISSION=1
+			;;
+	esac
+done
+
+##########
+## Main ##
+##########
+
+if [ $ASK_FOR_PERMISSION ]; then
+ ask_for_permission
 fi
 
-notify-send "Initializing backup Application."
-make_backup "$MEDIA_PATH/$1"
+
+if [ ! $USE_FULL_PATH ]; then
+
+ # Get non-option arguments:
+ shift $((OPTIND - 1))
+
+ if [ $1 ]; then
+  FULL_PATH="/run/media/$USER/$1"
+ else
+  # Fallback - Default folder to backup
+  FULL_PATH="/run/media/$USER/Paulo_3i3"
+ fi
+fi
+
+
+echo $1 one
+echo $FULL_PATH fh
+echo $@ OPTIND
+make_backup $FULL_PATH
+
+# $1 - Drive to backup from
+#if [ -z "$1" ]; then
+## If no argument
+#	make_backup "$MEDIA_PATH/Paulo_3i3"
+#	exit
+#else
+#	notify-send "Initializing backup Application."
+#	make_backup "$MEDIA_PATH/$1"
+#fi
