@@ -50,6 +50,7 @@ if [ $1 -eq 1 ]; then
 	echo "projetoClassioPW"
 	echo "computadorCss2"
 	echo "PHPFiles"
+	echo "QTS-CRUD"
 	echo
 	echo "Access http://localhost/{projetct_name} to access them." 
 
