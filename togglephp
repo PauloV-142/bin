@@ -29,6 +29,7 @@ if [ $1 -eq 1 ]; then
 	
 	echo "Giving php-fpm access to /var/www/html"
 	/sbin/restorecon -r /var/www/html/
+	sudo /sbin/restorecon -r /var/www/html/
 	/sbin/restorecon -r /home/gut/Documentos/Programacao/PHP/
 	echo "---------------------------------------------------"
 
@@ -43,7 +44,7 @@ if [ $1 -eq 1 ]; then
 	# Restart Apache service to apply changes
 	## sudo systemctl restart httpd.service
 	echo "Use esse comando para permitir que o PHP leia os arquivos do /var/www/seu/projeto"
-	echo "/sbin/restorecon -vR /var/www/seu/projeto"
+	echo "/sbin/restorecon -vR /var/www/seu/projeto/"
 	echo
 	echo "You have the following projects:"
 	echo "projetoClassioPW"
