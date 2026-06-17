@@ -35,6 +35,8 @@ if [ $1 -eq 1 ]; then
 
 	printf "\nFinalizado\n"
 
+	notify-send --app-name="togglephp" "Apache+PHP+MariaDB iniciado. Veja o log para mais detalhes."
+
 	echo "TIP: run 'sudo tail -f /var/log/httpd/error_log' so see RTos logging."
 	# Change selinux rules for allow apache run without problems
 	## sudo chcon -R -t httpd_sys_rw_content_t /var/www
@@ -53,7 +55,7 @@ if [ $1 -eq 1 ]; then
 	echo "QTS-CRUD"
 	echo
 	echo "Access http://localhost/{projetct_name} to access them." 
-
+	
 elif [ $1 -eq 0 ]; then
 	echo "Desligando..."
 	echo "Desativando apache (httpd)"
@@ -72,4 +74,6 @@ elif [ $1 -eq 0 ]; then
     echo
 
     echo "Tudo foi desativado."
+
+	notify-send --app-name="togglephp" "Apache+MariaDB+PHP Desativado. Veja o log para mais detalhes."
 fi
