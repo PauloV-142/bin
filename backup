@@ -37,7 +37,7 @@ BACKUP_PATH="$HOME/Backups/"
 
 make_backup(){
  # $1 - Source folder.
- echo_modified_files
+ #echo_modified_files
  notify-send "Starting Backup."
  rsync -avz --progress --delete $1 "$BACKUP_PATH"
  notify-send "Finished Backup of ${1}"
