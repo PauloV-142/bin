@@ -58,6 +58,9 @@ if [ $1 -eq 1 ]; then
 	
 elif [ $1 -eq 0 ]; then
 	echo "Desligando..."
+	echo
+	echo "Logs:"
+	echo "---------------------------------------------------"
 	echo "Desativando apache (httpd)"
     sudo systemctl disable --now httpd
     sudo systemctl status httpd | grep -n "Stopped" || echo "Já está desativado."
@@ -72,6 +75,7 @@ elif [ $1 -eq 0 ]; then
     sudo systemctl disable --now php-fpm
     sudo systemctl status php-fpm | grep -n "Stopped" || echo "Já está desativado."
     echo
+    echo "---------------------------------------------------"
 
     echo "Tudo foi desativado."
 
