@@ -4,6 +4,7 @@
 ## Going to be written in python for compatibility with all shells.
 
 ## TODO:
+### - Clone using SSH: 'git@github.com:PauloV-142/bin.git'
 ### - Add $HOME/bin to shell in all shells
 ### 	- [x] fish
 ### 	- [ ] bash, zsh, sh
