@@ -54,6 +54,7 @@ open_or_create_script() {
 show_git_status(){
 	cd $HOME/bin
 	GIT_STATUS=$(git status --short)
+	echo BRANCH: $(git branch --show-current)
 	if [ "$GIT_STATUS" ]; then
 		echo "There are changes to commit!"
 		git status --short
