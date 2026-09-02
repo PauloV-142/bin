@@ -61,6 +61,7 @@ show_git_status(){
 }
 
 open_folder(){
+	# This function works only on bash and you should run edit as '. edit' or 'source edit'
 	cd $HOME/bin
 }
 
