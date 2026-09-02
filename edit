@@ -4,7 +4,15 @@
 ## Variables ##
 ###############
 
-TEXT_EDITOR='nano'
+PREFFERED_EDITORS=('micro' 'kate' 'nano')
+
+for EDITOR in "${PREFFERED_EDITORS[@]}"; do
+	# Selects the first avaliable editor on the list
+	if command -v $EDITOR >/dev/null 2>&1; then
+		TEXT_EDITOR=$EDITOR
+		break
+	fi
+done
 
 ###############
 ## Functions ##
