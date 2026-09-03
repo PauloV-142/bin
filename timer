@@ -3,7 +3,11 @@
 import os, sys
 
 # Suggestion:
-# - Add custom message
+# - Possibility for custom message
+# - Time in minutes as default
+# - Option -s for seconds
+# [x] Message for when the timer starts
+# [x] Background process
 
 try:
     TIME = int(sys.argv[1])
@@ -15,5 +19,8 @@ except:
 
 FORMATTED_TIME = f'{TIME / 60 :2.2}m' if TIME > 60 else f'{TIME}s'
 
-os.system(f'sleep {TIME} && notify-send "Timer of {FORMATTED_TIME} Finished :D"')
+print(f'Timer of {FORMATTED_TIME} started in background.')
+NOTIFY = f'notify-send "Timer of {FORMATTED_TIME} Finished :D"'
+
+os.system(f'sleep {TIME} && {NOTIFY} &') # The & (Ampersand) on the end makes the command run in background
 
