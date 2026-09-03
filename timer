@@ -1,0 +1,19 @@
+#!/bin/python
+
+import os, sys
+
+# Suggestion:
+# - Add custom message
+
+try:
+    TIME = int(sys.argv[1])
+except:
+    print('This program recieves only a number as argument.')
+    # Exit code of 1 indicates error
+    sys.exit(1)
+
+
+FORMATTED_TIME = f'{TIME / 60 :2.2}m' if TIME > 60 else f'{TIME}s'
+
+os.system(f'sleep {TIME} && notify-send "Timer of {FORMATTED_TIME} Finished :D"')
+
