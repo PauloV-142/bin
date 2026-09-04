@@ -3,24 +3,32 @@
 import os, sys
 
 # Suggestion:
-# - Possibility for custom message
+# - Possibility for custom message (second argument perhaps?)
 # - Time in minutes as default
 # - Option -s for seconds
 # [x] Message for when the timer starts
 # [x] Background process
+# - Way to disable the timer in background (closing the termina doesn't do it)
+
+###############
+## VARIABLES ##
+###############
 
 try:
-    TIME = int(sys.argv[1])
+    TIME = int(sys.argv[1]) * 60
 except:
     print('This program recieves only a number as argument.')
-    # Exit code of 1 indicates error
-    sys.exit(1)
+    sys.exit(1) # Exit code of 1 indicates error
 
+##########
+## MAIN ##
+##########
 
-FORMATTED_TIME = f'{TIME / 60 :2.2}m' if TIME > 60 else f'{TIME}s'
-
-print(f'Timer of {FORMATTED_TIME} started in background.')
-NOTIFY = f'notify-send "Timer of {FORMATTED_TIME} Finished :D"'
+FORMATTED_TIME = TIME / 60
+print(f'Timer of {FORMATTED_TIME}m started in background.')
+NOTIFY = f'notify-send "Timer of {FORMATTED_TIME}m Finished :D"'
 
 os.system(f'sleep {TIME} && {NOTIFY} &') # The & (Ampersand) on the end makes the command run in background
+
+sys.exit(0)
 
