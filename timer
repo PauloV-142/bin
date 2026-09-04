@@ -3,32 +3,64 @@
 import os, sys
 
 # Suggestion:
-# - Possibility for custom message (second argument perhaps?)
-# - Time in minutes as default
-# - Option -s for seconds
+# - Possibility for custom message (Last argument perhaps?)
+# [x] Time in minutes as default
+# [x] Option -s for seconds
 # [x] Message for when the timer starts
 # [x] Background process
 # - Way to disable the timer in background (closing the termina doesn't do it)
+# - Better options for notify-send
+
+###############
+## FUNCTIONS ##
+###############
+
+to_seconds = lambda time: time * 60
+
+def start_timer(time, inMinutes):
+    formatted_time = f'{time / 60}m' if inMinutes else f'{time}s'
+    print(f'Timer of {formatted_time} started in background.')
+    NOTIFY = f'notify-send "Timer of {formatted_time} Finished :D"'
+
+    os.system(f'sleep {time} && {NOTIFY} &') # The & (Ampersand) on the end makes the command run in background
+
+    sys.exit(0)
 
 ###############
 ## VARIABLES ##
 ###############
 
-try:
-    TIME = int(sys.argv[1]) * 60
-except:
-    print('This program recieves only a number as argument.')
-    sys.exit(1) # Exit code of 1 indicates error
+USAGE = """
+        USAGE:
+
+        timer [minutes]
+        timer -s [seconds]
+        """
 
 ##########
 ## MAIN ##
 ##########
 
-FORMATTED_TIME = TIME / 60
-print(f'Timer of {FORMATTED_TIME}m started in background.')
-NOTIFY = f'notify-send "Timer of {FORMATTED_TIME}m Finished :D"'
+if len(sys.argv) == 1:
+    print('Insert at least one argument!')
+    print(USAGE)
+    sys.exit(1)
+       
+args = sys.argv[1:]
 
-os.system(f'sleep {TIME} && {NOTIFY} &') # The & (Ampersand) on the end makes the command run in background
+# Loop through every arg and do stuff.
+for i, arg in enumerate(args):
 
-sys.exit(0)
+    if arg.isdigit():
+        time = int(arg)
+        start_timer(time * 60, True)
 
+    match arg:
+        case '-s':
+            time = int(args[i+1])
+            start_timer(time, False)
+
+        case _:
+            print('Invalid Option!\n')
+            print(USAGE)
+            sys.exit(1)
